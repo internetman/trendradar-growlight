@@ -1,14 +1,13 @@
 # ═══════════════════════════════════════════════════════════════
-# TrendRadar 配置文件（植物灯行业专用）
+# TrendRadar 配置文件（植物灯 + 农业版）
 # ═══════════════════════════════════════════════════════════════
 
 # ===============================================================
 # 1. 基础设置
 # ===============================================================
 app:
-  # 时区配置
-  timezone: "Asia/Shanghai"
-  show_version_update: true  # 显示版本更新提示
+  timezone: "Asia/Shanghai"        # 时区
+  show_version_update: true        # 显示版本更新提示
 
 
 # ===============================================================
@@ -40,38 +39,63 @@ platforms:
 
 
 # ===============================================================
-# 3. 数据源 - RSS 订阅（植物灯相关）
+# 3. 数据源 - RSS 订阅（植物灯 + 农业）
 # ===============================================================
 rss:
   enabled: true  # 是否启用 RSS 抓取
 
-  # 文章新鲜度过滤配置（全局默认值）
+  # 全局新鲜度过滤：默认只要最近 7 天的文章
   freshness_filter:
     enabled: true
-    max_age_days: 7   # 全局默认：只推送 7 天内的文章
+    max_age_days: 7
 
-  # RSS 源列表：这里我用 Google News 搜索，专门抓“植物灯 / 温室补光”等新闻
+  # RSS 源列表
   feeds:
+    # -----------------------------------------------------------
+    # 植物照明 / 植物工厂 / 垂直农业 / CEA（英文）
+    # -----------------------------------------------------------
     - id: "google-led-grow-light"
       name: "Google News - LED grow light"
-      url: "https://news.google.com/rss/search?q=%22LED+grow+light%22&hl=en-US&gl=US&ceid=US:en"
+      url: "https://news.google.com/rss/search?q=%22LED%20grow%20light%22&hl=en-US&gl=US&ceid=US:en"
 
     - id: "google-horticulture-lighting"
       name: "Google News - horticulture lighting"
-      url: "https://news.google.com/rss/search?q=%22horticulture+lighting%22+OR+%22grow+lighting%22&hl=en-US&gl=US&ceid=US:en"
+      url: "https://news.google.com/rss/search?q=%22horticulture%20lighting%22%20OR%20%22grow%20lighting%22&hl=en-US&gl=US&ceid=US:en"
 
     - id: "google-greenhouse-lighting"
       name: "Google News - greenhouse lighting"
-      url: "https://news.google.com/rss/search?q=%22greenhouse+lighting%22+OR+%22supplemental+lighting%22+greenhouse&hl=en-US&gl=US&ceid=US:en"
+      url: "https://news.google.com/rss/search?q=%22greenhouse%20lighting%22%20OR%20%22supplemental%20lighting%22%20greenhouse&hl=en-US&gl=US&ceid=US:en"
 
-    - id: "google-cannabis-grow"
-      name: "Google News - cannabis grow lighting"
-      url: "https://news.google.com/rss/search?q=%22cannabis%22+grow+light+OR+%22cannabis+cultivation%22+LED&hl=en-US&gl=US&ceid=US:en"
+    - id: "google-vertical-farming"
+      name: "Google News - vertical / indoor farming"
+      url: "https://news.google.com/rss/search?q=%22vertical%20farming%22%20OR%20%22indoor%20farming%22%20OR%20%22indoor%20agriculture%22&hl=en-US&gl=US&ceid=US:en"
 
+    - id: "google-cea"
+      name: "Google News - controlled environment agriculture (CEA)"
+      url: "https://news.google.com/rss/search?q=%22controlled%20environment%20agriculture%22%20OR%20%22CEA%20greenhouse%22&hl=en-US&gl=US&ceid=US:en"
+
+    # -----------------------------------------------------------
+    # 植物照明 / 设施农业 / 智慧农业 / 农业资本（中文）
+    # -----------------------------------------------------------
     - id: "google-cn-plant-light"
-      name: "谷歌新闻 - 植物补光灯"
-      url: "https://news.google.com/rss/search?q=%E6%A4%8D%E7%89%A9%E7%94%9F%E9%95%BF%E7%81%AF+OR+%E6%A4%8D%E7%89%A9%E8%A1%A5%E5%85%89%E7%81%AF+OR+%E6%A4%8D%E7%89%A9%E5%85%89%E7%85%A7&hl=zh-CN&gl=CN&ceid=CN:zh-Hans"
-      max_age_days: 10   # 中文这条允许再老一点，避免新闻太少
+      name: "谷歌新闻 - 植物照明 / 补光灯"
+      url: "https://news.google.com/rss/search?q=%E6%A4%8D%E7%89%A9%E7%85%A7%E6%98%8E%20OR%20%E6%A4%8D%E7%89%A9%E8%A1%A5%E5%85%89%20OR%20%E6%A4%8D%E7%89%A9%E7%94%9F%E9%95%BF%E7%81%AF&hl=zh-CN&gl=CN&ceid=CN:zh-Hans"
+      max_age_days: 10   # 中文这条适当放宽一点，避免太少
+
+    - id: "google-cn-facility-agri"
+      name: "谷歌新闻 - 植物工厂 / 温室农业 / 设施农业"
+      url: "https://news.google.com/rss/search?q=%E6%A4%8D%E7%89%A9%E5%B7%A5%E5%8E%82%20OR%20%E6%B8%A9%E5%AE%A4%E5%86%9C%E4%B8%9A%20OR%20%E6%96%BD%E8%AE%BE%E5%86%9C%E4%B8%9A%20OR%20%E6%B8%A9%E5%AE%A4%E5%B7%A5%E7%A8%8B&hl=zh-CN&gl=CN&ceid=CN:zh-Hans"
+      max_age_days: 10
+
+    - id: "google-cn-smart-agri"
+      name: "谷歌新闻 - 智慧农业 / 数字农业 / 农业物联网"
+      url: "https://news.google.com/rss/search?q=%E6%99%BA%E6%85%A7%E5%86%9C%E4%B8%9A%20OR%20%E6%95%B0%E5%AD%97%E5%86%9C%E4%B8%9A%20OR%20%E5%86%9C%E4%B8%9A%E7%89%A9%E8%81%94%E7%BD%91&hl=zh-CN&gl=CN&ceid=CN:zh-Hans"
+      max_age_days: 10
+
+    - id: "google-cn-agri-capital"
+      name: "谷歌新闻 - 农业园区 / 设施农业投资 / 乡村振兴"
+      url: "https://news.google.com/rss/search?q=%E5%86%9C%E4%B8%9A%E5%9B%AD%E5%8C%BA%20OR%20%E7%8E%B0%E4%BB%A3%E5%86%9C%E4%B8%9A%E4%BA%A7%E4%B8%9A%E5%9B%AD%20OR%20%E8%AE%BE%E6%96%BD%E5%86%9C%E4%B8%9A%20OR%20%E4%B9%A1%E6%9D%91%E6%8C%AF%E5%85%B4%20OR%20%E5%86%9C%E4%B8%9A%E6%8A%95%E8%B5%84&hl=zh-CN&gl=CN&ceid=CN:zh-Hans"
+      max_age_days: 15   # 投融资&园区类节奏更慢一些
 
 
 # ===============================================================
@@ -80,11 +104,13 @@ rss:
 report:
   # 模式：daily | current | incremental
   mode: "current"
+
   # 展示方式：keyword 按关键词分组；platform 按平台分组
   display_mode: "keyword"
+
   rank_threshold: 5
   sort_by_position_first: false
-  max_news_per_keyword: 0    # 0 = 不限制
+  max_news_per_keyword: 0        # 0 = 不限制
   reverse_content_order: false
 
 
@@ -94,21 +120,21 @@ report:
 notification:
   enabled: true
 
-  # 推送时间窗口（你现在是 GitHub Actions 定时跑，可以先关着）
+  # 推送时间窗口（你现在是 GitHub Actions 定时跑，可关掉）
   push_window:
     enabled: false
     start: "20:00"
     end: "22:00"
     once_per_day: true
 
-  # 独立展示区（比如想完整看某个平台的热榜 / 某个 RSS）
+  # 独立展示区（可以单独拉某个平台 / 某个 RSS 出来）
   standalone_display:
     enabled: false
-    platforms: []   # 例如 ["zhihu", "weibo"]
-    rss_feeds: []   # 例如 ["google-led-grow-light"]
+    platforms: []        # 例如 ["zhihu", "weibo"]
+    rss_feeds: []        # 例如 ["google-led-grow-light"]
     max_items: 20
 
-  # 各渠道具体配置（敏感信息建议放 GitHub Secrets，这里留空）
+  # 各渠道配置（敏感信息建议用 GitHub Secrets 覆盖）
   channels:
     feishu:
       webhook_url: ""
@@ -146,18 +172,15 @@ storage:
   # auto = GitHub Actions 时优先用远程；否则用本地
   backend: "auto"
 
-  # 数据格式
   formats:
     sqlite: true
     txt: false
     html: true   # 邮件必须开
 
-  # 本地存储
   local:
     data_dir: "output"
     retention_days: 0   # 0 = 永久
 
-  # 远程存储（S3 兼容），你目前可以先不管
   remote:
     retention_days: 0
     endpoint_url: ""
@@ -166,7 +189,6 @@ storage:
     secret_access_key: ""
     region: ""
 
-  # 从远程拉取数据（一般用不到）
   pull:
     enabled: false
     days: 7
@@ -176,9 +198,9 @@ storage:
 # 7. AI 分析功能
 # ===============================================================
 ai_analysis:
-  enabled: true         # 如果暂时没配 AI_API_KEY，也可以先 true，不影响抓取
+  enabled: true               # 没配置 AI_API_KEY 的话，抓取不受影响
   provider: "deepseek"
-  api_key: ""           # 建议用环境变量 AI_API_KEY
+  api_key: ""                 # 建议用环境变量 AI_API_KEY
   model: "deepseek-chat"
   base_url: ""
   timeout: 90
@@ -190,14 +212,14 @@ ai_analysis:
   max_news_for_analysis: 50
 
   # 是否把 RSS 一起拿去分析
-  include_rss: false
+  include_rss: false          # 先关着，等你觉得 RSS 质量 OK 再开
 
   # 提示词文件
   prompt_file: "ai_analysis_prompt.txt"
 
 
 # ===============================================================
-# 8. 高级设置（一般不用动）
+# 8. 高级设置
 # ===============================================================
 advanced:
   debug: false
@@ -205,14 +227,12 @@ advanced:
   version_check_url: "https://raw.githubusercontent.com/sansan0/TrendRadar/refs/heads/master/version"
   mcp_version_check_url: "https://raw.githubusercontent.com/sansan0/TrendRadar/refs/heads/master/version_mcp"
 
-  # 爬虫设置（热榜）
   crawler:
     enabled: true
     request_interval: 2000
     use_proxy: false
     default_proxy: "http://127.0.0.1:10801"
 
-  # RSS 抓取设置
   rss:
     request_interval: 1000
     timeout: 15
@@ -220,16 +240,13 @@ advanced:
     proxy_url: ""
     notification_enabled: true
 
-  # 排序权重（不用动）
   weight:
     rank: 0.6
     frequency: 0.3
     hotness: 0.1
 
-  # 多账号限制
   max_accounts_per_channel: 3
 
-  # 消息分批大小
   batch_size:
     default: 4000
     dingtalk: 20000
@@ -237,8 +254,6 @@ advanced:
     bark: 4000
     slack: 4000
 
-  # 批次发送间隔（秒）
   batch_send_interval: 3
 
-  # 飞书分隔线
   feishu_message_separator: "━━━━━━━━━━━━━━━━━━━"
