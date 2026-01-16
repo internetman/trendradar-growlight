@@ -2,7 +2,7 @@
 """
 HTML 报告渲染模块
 
-提供 HTML 格式的热点新闻报告生成功能
+提供 HTML 格式的热点新闻/农业照明报告生成功能
 """
 
 from datetime import datetime
@@ -50,7 +50,7 @@ def render_html_content(
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>热点新闻分析</title>
+        <title>全球农业照明要闻 · 每日推送</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <style>
             * { box-sizing: border-box; }
@@ -658,7 +658,7 @@ def render_html_content(
                     <button class="save-btn" onclick="saveAsImage()">保存为图片</button>
                     <button class="save-btn" onclick="saveAsMultipleImages()">分段保存</button>
                 </div>
-                <div class="header-title">热点新闻分析</div>
+                <div class="header-title">全球农业照明要闻 · 每日推送</div>
                 <div class="header-info">
                     <div class="info-item">
                         <span class="info-label">报告类型</span>
@@ -1006,37 +1006,8 @@ def render_html_content(
         Args:
             data: 独立展示数据，格式：
                 {
-                    "platforms": [
-                        {
-                            "id": "zhihu",
-                            "name": "知乎热榜",
-                            "items": [
-                                {
-                                    "title": "标题",
-                                    "url": "链接",
-                                    "rank": 1,
-                                    "ranks": [1, 2, 1],
-                                    "first_time": "08:00",
-                                    "last_time": "12:30",
-                                    "count": 3,
-                                }
-                            ]
-                        }
-                    ],
-                    "rss_feeds": [
-                        {
-                            "id": "hacker-news",
-                            "name": "Hacker News",
-                            "items": [
-                                {
-                                    "title": "标题",
-                                    "url": "链接",
-                                    "published_at": "2025-01-07T08:00:00",
-                                    "author": "作者",
-                                }
-                            ]
-                        }
-                    ]
+                    "platforms": [...],
+                    "rss_feeds": [...]
                 }
 
         Returns:
@@ -1096,12 +1067,11 @@ def render_html_content(
                             <div class="news-content">
                                 <div class="news-header">"""
 
-                # 排名显示（复用 rank-num 样式，无 # 前缀）
+                # 排名显示
                 if ranks:
                     min_rank = min(ranks)
                     max_rank = max(ranks)
 
-                    # 确定排名等级
                     if min_rank <= 3:
                         rank_class = "top"
                     elif min_rank <= 10:
@@ -1124,7 +1094,7 @@ def render_html_content(
                         rank_class = ""
                     standalone_html += f'<span class="rank-num {rank_class}">{rank}</span>'
 
-                # 时间显示（复用 time-info 样式，将 HH-MM 转换为 HH:MM）
+                # 时间显示
                 if first_time and last_time and first_time != last_time:
                     first_time_display = convert_time_for_display(first_time)
                     last_time_display = convert_time_for_display(last_time)
@@ -1133,7 +1103,7 @@ def render_html_content(
                     first_time_display = convert_time_for_display(first_time)
                     standalone_html += f'<span class="time-info">{html_escape(first_time_display)}</span>'
 
-                # 出现次数（复用 count-info 样式）
+                # 出现次数
                 if count > 1:
                     standalone_html += f'<span class="count-info">{count}次</span>'
 
@@ -1141,7 +1111,6 @@ def render_html_content(
                                 </div>
                                 <div class="news-title">"""
 
-                # 标题和链接（复用 news-link 样式）
                 escaped_title = html_escape(title)
                 if url:
                     escaped_url = html_escape(url)
@@ -1157,7 +1126,7 @@ def render_html_content(
             standalone_html += """
                     </div>"""
 
-        # 渲染 RSS 源（复用相同结构）
+        # 渲染 RSS 源
         for feed in rss_feeds:
             feed_name = feed.get("name", feed.get("id", ""))
             items = feed.get("items", [])
@@ -1183,7 +1152,6 @@ def render_html_content(
                             <div class="news-content">
                                 <div class="news-header">"""
 
-                # 时间显示（格式化 ISO 时间）
                 if published_at:
                     try:
                         from datetime import datetime as dt
@@ -1197,7 +1165,6 @@ def render_html_content(
 
                     standalone_html += f'<span class="time-info">{html_escape(time_display)}</span>'
 
-                # 作者显示
                 if author:
                     standalone_html += f'<span class="source-name">{html_escape(author)}</span>'
 
@@ -1231,25 +1198,22 @@ def render_html_content(
     # 生成独立展示区 HTML
     standalone_html = render_standalone_html(standalone_data)
 
-    # 根据配置决定内容顺序（与推送逻辑一致）
+    # 根据配置决定内容顺序：RSS 在最上面
     if reverse_content_order:
-        # 新增在前，统计在后
-        # 顺序：热榜新增 → RSS新增 → 热榜统计 → RSS统计 → 独立展示区
-        html += new_titles_html + rss_new_html + stats_html + rss_stats_html + standalone_html
+        # 新增在前，统计在后；RSS 优先
+        # 顺序：RSS 新增 → 热榜新增 → RSS 统计 → 热榜统计 → 独立展示区
+        html += rss_new_html + new_titles_html + rss_stats_html + stats_html + standalone_html
     else:
-        # 默认：统计在前，新增在后
-        # 顺序：热榜统计 → RSS统计 → 热榜新增 → RSS新增 → 独立展示区
-        html += stats_html + rss_stats_html + new_titles_html + rss_new_html + standalone_html
+        # 默认：统计在前，新增加在后；RSS 优先
+        # 顺序：RSS 统计 → 热榜统计 → 热榜新增 → RSS 新增 → 独立展示区
+        html += rss_stats_html + stats_html + new_titles_html + rss_new_html + standalone_html
 
     html += """
             </div>
 
             <div class="footer">
                 <div class="footer-content">
-                    由 <span class="project-name">TrendRadar</span> 生成 ·
-                    <a href="https://github.com/sansan0/TrendRadar" target="_blank" class="footer-link">
-                        GitHub 开源项目
-                    </a>"""
+                    由 <span class="project-name">Number 朗文市场部每日推荐程序</span> 自动生成"""
 
     if update_info:
         html += f"""
@@ -1308,7 +1272,7 @@ def render_html_content(
 
                     const link = document.createElement('a');
                     const now = new Date();
-                    const filename = `TrendRadar_热点新闻分析_${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}.png`;
+                    const filename = `TrendRadar_全球农业照明要闻每日推送_${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}.png`;
 
                     link.download = filename;
                     link.href = canvas.toDataURL('image/png', 1.0);
@@ -1477,6 +1441,9 @@ def render_html_content(
 
                     // 为每个分段生成图片
                     const images = [];
+                    const now = new Date();
+                    const baseFilename = `TrendRadar_全球农业照明要闻每日推送_${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}`;
+
                     for (let i = 0; i < segments.length; i++) {
                         const segment = segments[i];
                         button.textContent = `生成中 (${i + 1}/${segments.length})...`;
@@ -1533,9 +1500,6 @@ def render_html_content(
                     buttons.style.visibility = 'visible';
 
                     // 下载所有图片
-                    const now = new Date();
-                    const baseFilename = `TrendRadar_热点新闻分析_${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}`;
-
                     for (let i = 0; i < images.length; i++) {
                         const link = document.createElement('a');
                         link.download = `${baseFilename}_part${i + 1}.png`;
