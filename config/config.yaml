@@ -1,27 +1,18 @@
 # ═══════════════════════════════════════════════════════════════
-#                    TrendRadar 配置文件
+# TrendRadar 配置文件（植物灯行业专用）
 # ═══════════════════════════════════════════════════════════════
-
 
 # ===============================================================
 # 1. 基础设置
 # ===============================================================
 app:
-  # 时区配置（影响所有时间显示、推送窗口判断、数据存储）
-  # 常用时区：
-  #   - Asia/Shanghai (北京时间 UTC+8)
-  #   - America/New_York (美东时间 UTC-5/-4)
-  #   - Europe/London (伦敦时间 UTC+0/+1)
-  # 完整时区列表: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  # 时区配置
   timezone: "Asia/Shanghai"
-  show_version_update: true           # 显示版本更新提示
+  show_version_update: true  # 显示版本更新提示
 
 
 # ===============================================================
 # 2. 数据源 - 热榜平台
-#
-# id: 平台唯一标识（勿修改）
-# name: 显示名称（可自定义，修改后不影响运行）
 # ===============================================================
 platforms:
   - id: "toutiao"
@@ -49,312 +40,205 @@ platforms:
 
 
 # ===============================================================
-# 3. 数据源 - RSS 订阅
-#
-# 与热榜数据分开存储，按时间流展示
-# 每个源配置：id(唯一标识)、name(显示名称)、url(订阅地址)
-# enabled: 可选，默认 true
-# max_age_days: 可选，覆盖全局 freshness_filter.max_age_days
+# 3. 数据源 - RSS 订阅（植物灯相关）
 # ===============================================================
 rss:
-  enabled: true                       # 是否启用 RSS 抓取
+  enabled: true  # 是否启用 RSS 抓取
 
   # 文章新鲜度过滤配置（全局默认值）
-  # 过滤掉发布时间超过指定天数的旧文章，避免同一篇文章重复出现在推送中
-  #
-  # 过滤逻辑：
-  #   - 文章发布时间距当前时间（app.timezone 时区）超过 N 天则不推送
-  #   - 无发布时间的文章会被保留（不过滤）
-  #
-  # ⚠️ 过滤时机：在推送阶段过滤
-  #    - 所有文章都会存入数据库（MCP Server 的 AI 查询仍可访问）
-  #    - 只有新鲜的文章会被推送到通知渠道
   freshness_filter:
-    enabled: true                     # 是否启用新鲜度过滤（默认启用）
-    max_age_days: 3                   # 最大文章年龄（天）
-                                      # - 正整数：只推送 N 天内的文章
-                                      # - 0：禁用过滤，推送所有文章
+    enabled: true
+    max_age_days: 7   # 全局默认：只推送 7 天内的文章
 
-  # 单个 feed 可配置 max_age_days 覆盖全局设置：
-  # - 不配置：使用全局 freshness_filter.max_age_days（默认 3 天）
-  # - 正整数：覆盖全局设置，只推送此天数内的文章
-  # - 0：禁用此频道的新鲜度过滤，推送所有文章
+  # RSS 源列表：这里我用 Google News 搜索，专门抓“植物灯 / 温室补光”等新闻
   feeds:
-    - id: "hacker-news"
-      name: "Hacker News"
-      url: "https://hnrss.org/frontpage"
-      # max_age_days: 1               # 示例：只推送1天内的文章
+    - id: "google-led-grow-light"
+      name: "Google News - LED grow light"
+      url: "https://news.google.com/rss/search?q=%22LED+grow+light%22&hl=en-US&gl=US&ceid=US:en"
 
-    - id: "ruanyifeng"
-      name: "阮一峰的网络日志"
-      url: "http://www.ruanyifeng.com/blog/atom.xml"
-      # max_age_days: 7               # 示例：推送7天内的文章（更新较慢的博客）
-    
-    - id: "yahoo-finance"
-      name: "雅虎财经"
-      url: "https://finance.yahoo.com/news/rssindex"
-      enabled: false                  # 禁用
+    - id: "google-horticulture-lighting"
+      name: "Google News - horticulture lighting"
+      url: "https://news.google.com/rss/search?q=%22horticulture+lighting%22+OR+%22grow+lighting%22&hl=en-US&gl=US&ceid=US:en"
 
-    # 自定义源示例
-    # - id: "custom-feed"
-    #   name: "自定义源"
-    #   url: "https://example.com/feed.xml"
-    #   enabled: false
-    #   max_age_days: 0               # 示例：禁用过滤，推送所有文章
+    - id: "google-greenhouse-lighting"
+      name: "Google News - greenhouse lighting"
+      url: "https://news.google.com/rss/search?q=%22greenhouse+lighting%22+OR+%22supplemental+lighting%22+greenhouse&hl=en-US&gl=US&ceid=US:en"
+
+    - id: "google-cannabis-grow"
+      name: "Google News - cannabis grow lighting"
+      url: "https://news.google.com/rss/search?q=%22cannabis%22+grow+light+OR+%22cannabis+cultivation%22+LED&hl=en-US&gl=US&ceid=US:en"
+
+    - id: "google-cn-plant-light"
+      name: "谷歌新闻 - 植物补光灯"
+      url: "https://news.google.com/rss/search?q=%E6%A4%8D%E7%89%A9%E7%94%9F%E9%95%BF%E7%81%AF+OR+%E6%A4%8D%E7%89%A9%E8%A1%A5%E5%85%89%E7%81%AF+OR+%E6%A4%8D%E7%89%A9%E5%85%89%E7%85%A7&hl=zh-CN&gl=CN&ceid=CN:zh-Hans"
+      max_age_days: 10   # 中文这条允许再老一点，避免新闻太少
 
 
 # ===============================================================
 # 4. 报告模式
-#
-# 🔸 daily（当日汇总模式）
-#    • 推送时机：按时推送(默认每小时推送一次)
-#    • 显示内容：当日所有匹配新闻 + 新增新闻区域
-#    • 适用场景：日报总结、全面了解当日热点趋势
-#
-# 🔸 current（当前榜单模式）
-#    • 推送时机：按时推送(默认每小时推送一次)
-#    • 显示内容：当前榜单匹配新闻 + 新增新闻区域
-#    • 适用场景：实时热点追踪、了解当前最火的内容
-#
-# 🔸 incremental（增量监控模式）
-#    • 推送时机：有新增才推送
-#    • 显示内容：新出现的匹配频率词新闻
-#    • 适用场景：避免重复信息干扰
 # ===============================================================
 report:
-  mode: "current"                     # 可选: daily | current | incremental
-  display_mode: "keyword"             # 可选: keyword | platform
-                                      # keyword: 按关键词分组显示（默认）
-                                      # platform: 按平台/来源分组显示
-  rank_threshold: 5                   # 排名高亮阈值
-  sort_by_position_first: false       # true=按配置位置排序，false=按热点条数排序
-  max_news_per_keyword: 0             # 每个关键词最大显示数量（0=不限制）
-  reverse_content_order: false        # false=热点词汇统计在前，true=新增热点新闻在前
+  # 模式：daily | current | incremental
+  mode: "current"
+  # 展示方式：keyword 按关键词分组；platform 按平台分组
+  display_mode: "keyword"
+  rank_threshold: 5
+  sort_by_position_first: false
+  max_news_per_keyword: 0    # 0 = 不限制
+  reverse_content_order: false
 
 
 # ===============================================================
 # 5. 推送通知
-#
-# ⚠️ 重要安全警告 ⚠️
-#
-# 🔴 请务必妥善保管好 webhooks，不要公开!!!
-# 🔴 如果你以 fork 的方式部署在 GitHub 上，请勿在此填写
-# 🔴 而是将 webhooks 填入 GitHub Secrets
-#    (Settings → Secrets and variables → Actions)
-# 🔴 否则：
-#    - 轻则：手机上收到大量垃圾广告推送
-#    - 重则：webhook 被滥用造成严重安全隐患
-#
-# 📌 多账号支持说明
-#
-# • 使用分号(;)分隔多个账号，如："url1;url2;url3"
-# • 需要配对的配置（如 Telegram 的 token 和 chat_id）数量必须一致
-# • 每个渠道最多支持 max_accounts_per_channel 个账号
-# • 邮箱已支持多收件人（逗号分隔）
 # ===============================================================
 notification:
-  enabled: true                       # 是否启用通知功能
+  enabled: true
 
-  # 🕐 推送时间窗口控制（可选功能）
-  # 用途：限制推送的时间范围，避免非工作时间打扰
-  # 适用场景：
-  #   - 只想在工作日白天接收推送（如 09:00-18:00）
-  #   - 希望在晚上固定时间收到汇总（如 20:00-22:00）
-  # 注意：GitHub Actions 执行时间不稳定，时间范围建议至少留足 2 小时
-  #       如果想要精准的定时推送，建议使用 Docker 部署在个人服务器上
+  # 推送时间窗口（你现在是 GitHub Actions 定时跑，可以先关着）
   push_window:
-    enabled: false                    # 是否启用推送时间窗口控制
-    start: "20:00"                    # 开始时间（北京时间）
-    end: "22:00"                      # 结束时间（北京时间）
-    once_per_day: true                # true=窗口内只推送一次，false=窗口内每次执行都推送
+    enabled: false
+    start: "20:00"
+    end: "22:00"
+    once_per_day: true
 
-  # 📋 独立展示区配置（可选功能）
-  # 用途：将指定平台的完整热榜/RSS 单独展示，不受关键词过滤影响
-  # 适用场景：
-  #   - 想完整查看某个平台的热榜排名
-  #   - RSS 源内容较少，希望全部展示而非只显示关键词匹配的
-  # 注意：同一新闻可能同时出现在关键词匹配区和独立展示区
+  # 独立展示区（比如想完整看某个平台的热榜 / 某个 RSS）
   standalone_display:
-    enabled: false                    # 是否启用独立展示区
-    platforms: []                     # 热榜平台 ID 列表（如 ["zhihu", "weibo"]）
-    rss_feeds: []                     # RSS 源 ID 列表（如 ["hacker-news"]）
-    max_items: 20                     # 每个源最多展示条数（0=不限制）
+    enabled: false
+    platforms: []   # 例如 ["zhihu", "weibo"]
+    rss_feeds: []   # 例如 ["google-led-grow-light"]
+    max_items: 20
 
-  # 推送渠道配置
+  # 各渠道具体配置（敏感信息建议放 GitHub Secrets，这里留空）
   channels:
     feishu:
-      webhook_url: ""                 # 飞书机器人 webhook URL
-
+      webhook_url: ""
     dingtalk:
-      webhook_url: ""                 # 钉钉机器人 webhook URL
-
+      webhook_url: ""
     wework:
-      webhook_url: ""                 # 企业微信机器人 webhook URL
-      msg_type: "markdown"            # 消息类型：markdown(群机器人) | text(个人微信应用)
-
+      webhook_url: ""
+      msg_type: "markdown"   # markdown | text
     telegram:
-      bot_token: ""                   # Telegram Bot Token
-      chat_id: ""                     # Telegram Chat ID
-
+      bot_token: ""
+      chat_id: ""
     email:
-      from: ""                        # 发件人邮箱地址
-      password: ""                    # 发件人邮箱密码或授权码
-      to: ""                          # 收件人邮箱，多个用逗号分隔
-      smtp_server: ""                 # SMTP 服务器（可选，留空自动识别）
-      smtp_port: ""                   # SMTP 端口（可选，留空自动识别）
-
+      from: ""          # 发件邮箱（可留空，用 Secrets 覆盖）
+      password: ""      # 授权码（可留空，用 Secrets 覆盖）
+      to: ""            # 收件邮箱，多个用逗号
+      smtp_server: ""   # 留空走自动识别
+      smtp_port: ""     # 留空走自动识别
     ntfy:
-      server_url: "https://ntfy.sh"   # ntfy 服务器地址（可改为自托管）
-      topic: ""                       # ntfy 主题名称
-      token: ""                       # ntfy 访问令牌（可选，用于私有主题）
-
+      server_url: "https://ntfy.sh"
+      topic: ""
+      token: ""
     bark:
-      url: ""                         # Bark 推送 URL（格式：https://api.day.app/your_device_key）
-
+      url: ""
     slack:
-      webhook_url: ""                 # Slack Incoming Webhook URL
-
+      webhook_url: ""
     generic_webhook:
-      webhook_url: ""                 # 通用 Webhook URL（支持 Discord、Matrix、IFTTT 等）
-      payload_template: ""            # JSON 模板，支持 {title} 和 {content} 占位符
-                                      # 示例：{"content": "{content}"}
-                                      # 留空则使用默认格式：{"title": "{title}", "content": "{content}"}
+      webhook_url: ""
+      payload_template: ""
 
 
 # ===============================================================
 # 6. 存储配置
 # ===============================================================
 storage:
-  # 存储后端选择
-  # - auto: 自动选择（GitHub Actions 且配置了远程存储 → remote，否则 → local）
-  # - local: 本地 SQLite + TXT/HTML 文件
-  # - remote: 远程云存储（S3 兼容协议，支持 R2/OSS/COS 等）
+  # auto = GitHub Actions 时优先用远程；否则用本地
   backend: "auto"
 
-  # 数据格式选项
+  # 数据格式
   formats:
-    sqlite: true                      # 主存储（必须启用）
-    txt: false                        # 是否生成 TXT 快照
-    html: true                       # 是否生成 HTML 报告（⚠️ 邮件推送必须设为 true）
+    sqlite: true
+    txt: false
+    html: true   # 邮件必须开
 
-  # 本地存储配置
+  # 本地存储
   local:
-    data_dir: "output"                # 数据目录
-    retention_days: 0                 # 保留天数（0=永久保留）
+    data_dir: "output"
+    retention_days: 0   # 0 = 永久
 
-  # 远程存储配置（S3 兼容协议）
-  # 支持: Cloudflare R2, 阿里云 OSS, 腾讯云 COS, AWS S3, MinIO 等
-  # 建议将敏感信息配置在 GitHub Secrets 或环境变量中
+  # 远程存储（S3 兼容），你目前可以先不管
   remote:
-    retention_days: 0                 # 保留天数（0=永久保留）
-    # S3 兼容配置（或使用环境变量 S3_ENDPOINT_URL 等）
-    endpoint_url: ""                  # 服务端点
-                                      # Cloudflare R2: https://<account_id>.r2.cloudflarestorage.com
-                                      # 阿里云 OSS: https://oss-cn-hangzhou.aliyuncs.com
-                                      # 腾讯云 COS: https://cos.ap-guangzhou.myqcloud.com
-    bucket_name: ""                   # 存储桶名称
-    access_key_id: ""                 # 访问密钥 ID
-    secret_access_key: ""             # 访问密钥
-    region: ""                        # 区域（可选，部分服务商需要）
+    retention_days: 0
+    endpoint_url: ""
+    bucket_name: ""
+    access_key_id: ""
+    secret_access_key: ""
+    region: ""
 
-  # 数据拉取配置（从远程同步到本地）
-  # 用于 MCP Server 等场景：爬虫存到远程，MCP 拉取到本地分析
+  # 从远程拉取数据（一般用不到）
   pull:
-    enabled: false                    # 是否启用启动时自动拉取
-    days: 7                           # 拉取最近 N 天的数据
+    enabled: false
+    days: 7
 
 
 # ===============================================================
 # 7. AI 分析功能
-#
-# 使用 AI 大模型对推送内容进行深度分析
-# 支持 OpenAI、Anthropic、DeepSeek等兼容接口
 # ===============================================================
 ai_analysis:
-  enabled: true                    # 是否启用 AI 分析
+  enabled: true         # 如果暂时没配 AI_API_KEY，也可以先 true，不影响抓取
+  provider: "deepseek"
+  api_key: ""           # 建议用环境变量 AI_API_KEY
+  model: "deepseek-chat"
+  base_url: ""
+  timeout: 90
 
-  # AI 提供商配置
-  # 支持的提供商:
-  #   - deepseek: DeepSeek（默认）
-  #   - openai: OpenAI
-  #   - gemini: Google Gemini
-  #   - custom: 自定义 OpenAI 兼容接口（需填写完整 base_url）
-  provider: "deepseek"              # 提供商
-  api_key: ""                       # API Key（建议使用环境变量 AI_API_KEY）
-
-  model: "deepseek-chat"            # 模型名称
-                                    # DeepSeek: deepseek-chat, deepseek-reasoner
-                                    # OpenAI: o3-mini, o1, gpt-4o
-                                    # Gemini: gemini-2.5-flash, gemini-2.5-pro
-
-  base_url: ""                      # 完整 API 地址（可选）
-                                    # 留空则使用提供商默认端点
-                                    # 其他提供商必须填写完整 URL
-                                    # 示例: https://api.openai.com/v1/chat/completions
-
-  timeout: 90                       # 请求超时（秒）
-
-  # 推送模式（仅在 enabled: true 时生效）
-  # - only_analysis: 仅推送 AI 分析结果（若开启了“独立展示区”则一并保留，屏蔽原始热榜/RSS 列表）
-  # - both: 两者都推送（分析追加在原始内容后）
-  # 注：如果不需要 AI 分析，请将上方 enabled 设为 false，无需使用 push_mode 控制
+  # 推送模式：only_analysis | both
   push_mode: "both"
 
-  # 分析选项
-  max_news_for_analysis: 50         # 参与分析的新闻数量上限（控制成本关键项）
-                                    # api 成本估算 (仅供参考)
-                                      # 按默认推送频率和模型
-                                      # GitHub Action 约 0.1 元/天
-                                      # Docker 部署约 0.2 元/天
+  # 参与分析的新闻条数上限
+  max_news_for_analysis: 50
 
-  include_rss: false                # 是否包含 RSS 内容进行分析
+  # 是否把 RSS 一起拿去分析
+  include_rss: false
 
-  # 提示词配置文件路径（相对于 config 目录）
+  # 提示词文件
   prompt_file: "ai_analysis_prompt.txt"
 
 
 # ===============================================================
-# 8. 高级设置（一般无需修改）
+# 8. 高级设置（一般不用动）
 # ===============================================================
 advanced:
-  # 调试模式
   debug: false
 
-  # 版本检查
   version_check_url: "https://raw.githubusercontent.com/sansan0/TrendRadar/refs/heads/master/version"
   mcp_version_check_url: "https://raw.githubusercontent.com/sansan0/TrendRadar/refs/heads/master/version_mcp"
 
-  # 爬虫设置
+  # 爬虫设置（热榜）
   crawler:
-    enabled: true                     # 是否启用爬取新闻功能
-    request_interval: 2000            # 请求间隔（毫秒）
-    use_proxy: false                  # 是否启用代理
+    enabled: true
+    request_interval: 2000
+    use_proxy: false
     default_proxy: "http://127.0.0.1:10801"
 
-  # RSS 设置
+  # RSS 抓取设置
   rss:
-    request_interval: 1000            # 请求间隔（毫秒）
-    timeout: 15                       # 请求超时（秒）
-    use_proxy: false                  # 是否使用代理
-    proxy_url: ""                     # RSS 专属代理（留空则使用 crawler.default_proxy）
-    notification_enabled: true        # 是否启用 RSS 通知推送
+    request_interval: 1000
+    timeout: 15
+    use_proxy: false
+    proxy_url: ""
+    notification_enabled: true
 
-  # 排序权重（用于重新排序不同平台的热搜）
-  # 合起来等于 1
+  # 排序权重（不用动）
   weight:
-    rank: 0.6                         # 排名权重
-    frequency: 0.3                    # 频次权重
-    hotness: 0.1                      # 热度权重
+    rank: 0.6
+    frequency: 0.3
+    hotness: 0.1
 
   # 多账号限制
-  max_accounts_per_channel: 3         # 每个渠道最大账号数量
+  max_accounts_per_channel: 3
 
-  # 消息分批大小（字节）- 内部配置，请勿修改
+  # 消息分批大小
   batch_size:
     default: 4000
     dingtalk: 20000
     feishu: 30000
     bark: 4000
     slack: 4000
-  batch_send_interval: 3              # 批次发送间隔（秒）
+
+  # 批次发送间隔（秒）
+  batch_send_interval: 3
+
+  # 飞书分隔线
   feishu_message_separator: "━━━━━━━━━━━━━━━━━━━"
