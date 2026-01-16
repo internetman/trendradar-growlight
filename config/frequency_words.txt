@@ -1,43 +1,28 @@
 # ═══════════════════════════════════════════════════════════════
-#                    TrendRadar 频率词配置文件（植物灯版）
+#                    TrendRadar 频率词配置文件
 # ═══════════════════════════════════════════════════════════════
 #
-# 说明（简版）：
-#   - [GLOBAL_FILTER]   全局过滤：这里的词命中就直接丢掉
-#   - [WORD_GROUPS]     监控词：分组管理你关心的行业 & 品牌 & 技术
+# 这个文件用来设置你想关注的新闻关键词。
+# 系统会自动抓取包含这些关键词的热榜新闻推送给你。
 #
-#   一行一个关键词，空行分隔不同的“词组”
-#   同一词组内部是“或”的关系（匹配任意一个即可）
-#
-# 关键语法（和官方文档一致）：
-#   普通词：     植物生长灯
-#   正则：       /grow light|grow lights/i
-#   别名：       /horticulture lighting/i => 植物照明
-#   组名：       [植物照明行业]
-#   必须词：     +温室
-#   排除词：     !水果
-#   限制条数：   @5
-#
-#   下面已经帮你配好一套“植物灯行业监控方案”，你可以在此基础上慢慢微调。
-#
+# 文件分为两个区域：
+#   [GLOBAL_FILTER]  - 全局过滤区：排除不想看的内容
+#   [WORD_GROUPS]    - 词组定义区：设置想关注的关键词
+# ═══════════════════════════════════════════════════════════════
+
 
 # ───────────────────────────────────────────────────────────────
 #                        全局过滤区
 # ───────────────────────────────────────────────────────────────
 [GLOBAL_FILTER]
-# 标题党 & 娱乐八卦之类，全部扔掉
+# 过滤标题党、低质量内容（按需自己加）
 震惊
-吃瓜
-八卦
-明星
-恋综
-选秀
-娱乐圈
-饭圈
-网红
-直播带货
-彩票
-博彩
+!抽奖
+!送iphone
+!送机票
+!情感故事
+!八卦
+!绯闻
 
 
 # ───────────────────────────────────────────────────────────────
@@ -46,317 +31,334 @@
 [WORD_GROUPS]
 
 # ═══════════════════════════════════════════════════════════════
-#                         大盘相关
+#                      农业 & 乡村振兴 · 大盘
 # ═══════════════════════════════════════════════════════════════
-
-[农业与温室大盘]
-温室
-设施农业
+[农业与乡村振兴大盘]
+农业
+现代农业
 智慧农业
-温室项目
-温室种植
-温室大棚
-大棚种植
+数字农业
+设施农业
+绿色农业
+高效农业
+生态农业
+农业现代化
+粮食安全
+粮食生产
+种植业
+畜牧业
+养殖业
+水产养殖
+渔业
+农产品
+农产品加工
+农产品出口
+农业园区
+农业产业园
+国家现代农业产业园
+农业示范区
+高标准农田
+农田建设
+土地流转
+土地托管
+家庭农场
+农民合作社
+农场主
+新型农业经营主体
+乡村振兴
+美丽乡村
+农村电商
+农产品电商
+农资
+种子
+农机
+农机装备
+农技推广
+农技服务
+农业补贴
+农机补贴
+农业项目
+农业投资
+农业贷款
+农业保险
+@40
+!手游
+!电影
+!综艺
+!明星
+!娱乐圈
+
+
+# ═══════════════════════════════════════════════════════════════
+#                      温室设施 & 植物工厂
+# ═══════════════════════════════════════════════════════════════
+[温室设施与植物工厂]
+温室
 玻璃温室
 连栋温室
-受控环境农业
-controlled environment agriculture
-CEA
+日光温室
+智能温室
+智慧温室
+温室大棚
+设施园艺
+设施蔬菜
+设施花卉
+植物工厂
+工厂化育苗
+工厂化种植
+立体种植
+vertical farm
 vertical farming
-垂直农场
-都市农业
-都市农场
-
-[LED照明与电气行业]
-照明行业
-LED照明
-照明厂商
-照明企业
-照明工程
-照明展会
-照明展
-lighting manufacturer
-lighting supplier
-lighting company
+indoor farming
+controlled environment agriculture
+controlled-environment agriculture
+CEA
+@25
+!花卉展
+!旅游景点
+!景观温室
 
 
 # ═══════════════════════════════════════════════════════════════
-#                         植物照明主战场
+#                      农业资本 & 项目融资
 # ═══════════════════════════════════════════════════════════════
+[农业资本与项目融资]
+农业投资
+农业基金
+农业风投
+农业并购
+农业上市
+农业板块
+农牧板块
+种业板块
+农业龙头
+农业企业
+IPO 农业
+融资
+增资
+收购
+股权投资
+战略合作
+项目签约
+项目落地
+项目开工
+项目竣工
+项目投产
+农业项目签约
+农业项目开工
+农业项目投产
+@30
+!影视
+!游戏
+!电竞
 
+
+# ═══════════════════════════════════════════════════════════════
+#                      植物照明 · 行业大词
+# ═══════════════════════════════════════════════════════════════
 [植物照明行业]
 植物照明
-植物灯
 植物生长灯
 植物补光灯
-温室补光
+LED植物灯
+LED 植物灯
+园艺照明
 温室照明
-grow light
-grow lights
-horticulture lighting
-horticultural lighting
-greenhouse lighting
-supplemental lighting
-grower lighting
-grow lamp
-grow lamps
-grower LED
-grow lighting
-plant lighting
-cannabis lighting
-cannabis grow light
-
-[大麻种植与植物灯]
-cannabis cultivation
-cannabis grow
-cannabis greenhouse
-cannabis facility
-cannabis grower
-cannabis cultivation facility
-cannabis grow operation
-cannabis indoor cultivation
-cannabis vertical farm
-cannabis grow room
-cannabis grow lights
-hemp cultivation
-hemp grow
-hemp greenhouse
-
-
-# ═══════════════════════════════════════════════════════════════
-#                         自家品牌（Nanolux）
-# ═══════════════════════════════════════════════════════════════
-
-[Nanolux 品牌与产品]
-Nanolux
-LuxMind
-Orion
-Summit
-SubRay
-OG Summit
-DE OG
-Orion Pro
-Orion AS
-Orion Pro 860W
-Orion AS400
-LuxMind Master Pro
-LuxMind SLC Controller
-ZX630W
-ZX720W
-LEDAS630V
-
-
-# ═══════════════════════════════════════════════════════════════
-#                         竞品品牌（国际）
-# ═══════════════════════════════════════════════════════════════
-
-[竞品_国际品牌]
-Gavita
-Fluence
-Signify
-Philips Horticulture
-Spider Farmer
-Mars Hydro
-ViparSpectra
-Lumatek
-Sanlight
-Valoya
-Growers Choice
-Luxx Lighting
-Illuminar Lighting
-Kind LED
-California Lightworks
-NextLight
-Hydrofarm
-TrolMaster
-ThinkGrow
-Vivosun
-GrowPros
-GoLeaf
-Megaphoton
-Sinowell
-RX-Series
-BAYLITE
-P.L. Light Systems
-farmlite
-
-
-# ═══════════════════════════════════════════════════════════════
-#                         Growshop / 渠道
-# ═══════════════════════════════════════════════════════════════
-
-[渠道_国际Growshop]
-grow shop
-growshop
-growshop online
-hydroponics store
-hydroponics shop
-indoor growing store
-indoor garden store
-LED grow light retailer
-horticulture lighting distributor
-grow equipment supplier
-wholesale grow lights
-
-
-# ═══════════════════════════════════════════════════════════════
-#                         竞品品牌（国内及区域）
-# ═══════════════════════════════════════════════════════════════
-
-[竞品_国内与区域品牌]
-三思电子
-联建光电
-洲明科技
-木林森
-雷士照明
-佛山照明
-鸿利智汇
-兆驰股份
-利亚德
-国星光电
-欧普照明
-阳光照明
-雪莱特
-英诺赛科
-锐骏半导体
-科瑞特
-易事特
-华普永明
-朗明纳斯
-昕诺飞中国
-森萨塔
-海泰新光
-瑞能股份
-迈锐光电
-浙江大自然
-农乐
-
-
-# ═══════════════════════════════════════════════════════════════
-#                         温室项目 & 设施农业
-# ═══════════════════════════════════════════════════════════════
-
-[温室项目与设施农业]
-高科技温室
-智慧温室
-玻璃温室项目
-连栋温室项目
-温室工程
-温室 EPC
-温室总包
-温室交钥匙
-温室项目合同
-温室补光项目
-农业园区
-现代农业园
-设施农业项目
-乡村振兴+温室
-农业投资+温室
-农业基金+温室
-
-[温室项目_带补光]
-温室+补光
-温室+植物灯
-温室+LED照明
-温室+光环境
-温室+grow light
-温室+lighting system
-温室+lighting retrofit
+温室补光
+大棚补光
 补光系统
 补光方案
-补光灯具
-补光设计
-灯光设计+温室
-光环境设计
-
-
-# ═══════════════════════════════════════════════════════════════
-#                         技术 & 光谱 & 控制
-# ═══════════════════════════════════════════════════════════════
-
-[植物灯技术与光谱]
-光谱配方
-光谱优化
+grow light
+LED grow light
+horticulture lighting
+greenhouse lighting
+indoor grow lighting
+grow room lighting
 光环境
 光配方
+光照方案
 PPF
 PPFD
 DLI
 光合有效辐射
-PAR 光子通量
-R:B 比例
-红蓝光配比
-全光谱植物灯
+μmol
+HPS 灯
+高压钠灯
+CMH 灯
+陶瓷金卤灯
+双端灯
+一体化补光灯
+条形补光灯
+顶光
+侧光
+下补光
+canopy lighting
+under-canopy lighting
+
+
+# ═══════════════════════════════════════════════════════════════
+#                      植物照明 · 技术与趋势
+# ═══════════════════════════════════════════════════════════════
+[植物照明技术与趋势]
+全光谱
+谱线
+光谱配方
+波段
+蓝光
+红光
 远红光
-UV 补光
+UV
 UV-A
 UV-B
-3 通道光谱
-多通道光谱
-可调光谱
-dimming
+光合作用
+光合效率
+光效
+μmol/J
+高光效
 调光
-0-10V 调光
-PWM 调光
+分区调光
+多通道调光
+智能控制
+远程控制
+物联网
+传感器
+环境监测
+温室环境
+气候控制
+灌溉系统
+栽培系统
+水培
+hydroponic
+aeroponic
+NFT 系统
+垂直农业
+vertical farming
+plant factory
 
 
 # ═══════════════════════════════════════════════════════════════
-#                         能效 / 认证 / ESG
+#                      品牌 · Nanolux 自家
 # ═══════════════════════════════════════════════════════════════
-
-[能效与认证]
-能效标准
-节能改造+温室
-节能改造+灯具
-节能项目+温室
-DLC 认证
-UL 认证
-ETL 认证
-CE 认证
-UKCA 认证
-RoHS
-能源之星
-节能补贴+LED
-绿色工厂+照明
-碳中和+温室
-低碳农业+温室
-ESG+温室
-可持续+温室
+[品牌_Nanolux]
+/Nanolux/i
+南农乐
+朗文科技
+深圳朗文
+OG Summit
+DE OG
+Orion
+Orion Pro
+Orion AS
+SubRay
+LuxMind
+LuxMind 控制器
+LXU 控制器
+LuxLink
+GrowLink
+NovaLux
 
 
 # ═══════════════════════════════════════════════════════════════
-#                         政策 / 补贴 / 规划
+#                      品牌 · 国际主流竞品
 # ═══════════════════════════════════════════════════════════════
-
-[农业政策与补贴]
-设施农业补贴
-温室补贴
-农业光伏+温室
-双碳+农业
-农业用电价格
-农业电价
-用电补贴+温室
-现代农业示范区
-国家现代农业产业园
-高标准农田+设施农业
+[品牌_国际竞品]
+/Mars ?Hydro/i
+/MarsHydro/i
+/Spider ?Farmer/i
+/Fluence|Fluence Bioengineering/i
+/Vivosun/i
+/Valoya/i
+/Gavita/i
+/Agrolux/i
+/ThinkGrow/i
+/Flexstar/i
+/PL Light Systems|PL Light/i
+/Sinowell/i
+/Growpros|Grow Pros/i
+/GoLeaf/i
+/Bloom ?Plus/i
+/Boyalite/i
+/Farmlite|farmlite/i
+/LUMATEK/i
+/TSL 灯|TSL grow/i
+/Horticulture Schro[ée]der/i
+/Dirks Growshop/i
+/Megapotton|Megapotthon|Megapotton/i
+/LED Grow Lights Depot/i
+/Casyoo/i
+/Greenhouse LED/i
+/LED, HPS and hybrid grow light solutions/i
 
 
 # ═══════════════════════════════════════════════════════════════
-#                         行业 & 资本动态
+#                      品牌 · 国内相关企业与渠道
 # ═══════════════════════════════════════════════════════════════
+[品牌_国内企业及渠道]
+美志光电
+深圳美志
+MarsHydro 中国
+Spider Farmer 中国
+惠州日昇照明
+Risen 日昇
+赛诺韦尔
+Sinowell 赛诺韦尔
+中国温室
+温室工程
+温室公司
+农业照明
+温室设备公司
+种植灯 工厂
+代工 植物灯
+OEM 植物灯
+ODM 植物灯
 
-[行业与资本动态]
-并购+植物照明
-并购+温室
-融资+植物照明
-融资+设施农业
-融资+温室项目
-IPO+植物照明
-IPO+LED照明
-IPO+设施农业
-股权投资+温室
-私募基金+设施农业
-VC+controlled environment agriculture
-VC+CEA
-PE+温室
-并购+controlled environment agriculture
+
+# ═══════════════════════════════════════════════════════════════
+#                      行业 & 媒体 · 植物照明/设施农业
+# ═══════════════════════════════════════════════════════════════
+[行业媒体与展会]
+植物工厂
+设施农业展
+温室展
+农业博览会
+园艺博览会
+horticulture expo
+greenhouse expo
+grow expo
+cannabis expo
+cultivation conference
+growers conference
+垂直农业峰会
+农业高峰论坛
+温室论坛
+园艺论坛
+
+
+# ═══════════════════════════════════════════════════════════════
+#                      行业 & 资本 · 植物照明方向
+# ═══════════════════════════════════════════════════════════════
+[行业与资本动态_植物照明]
+植物照明
+园艺照明
+LED 植物灯
+grow light
+horticulture lighting
+greenhouse lighting
+农业照明
+@30
+融资
+并购
+投资
+收购
+战略合作
+项目签约
+项目开工
+项目投产
+生产基地
+扩产
+新工厂
+产线投产
+IPO
+上市
+招股说明书
+募集资金
