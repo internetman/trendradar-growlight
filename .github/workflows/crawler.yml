@@ -2,12 +2,12 @@ name: Get Hot News
 
 on:
   schedule:
-    # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    # 🕚 每天北京时间 11:15 推送
+    # 🕦 每天北京时间 11:35 推送
     # GitHub Actions 使用 UTC 时间
-    # 北京时间 = UTC +8 → 11:15 = UTC 03:15
-    # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    - cron: "15 3 * * *"
+    # 北京时间 = UTC +8 → 11:35 = UTC 03:35
+    - cron: "35 3 * * *"
+
+  workflow_dispatch:
 
   # 允许在 GitHub Actions 页面手动点击运行
   workflow_dispatch:
