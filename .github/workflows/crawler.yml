@@ -7,7 +7,7 @@ on:
     # GitHub Actions 使用 UTC 时间
     # 北京时间 = UTC +8 → 10:30 = UTC 02:30
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    - cron: "30 2 * * *"
+    - cron: "*/5 * * * *"
 
   # 允许在 GitHub Actions 页面手动点击运行
   workflow_dispatch:
