@@ -7,8 +7,6 @@ on:
     # 北京时间 = UTC +8 → 11:35 = UTC 03:35
     - cron: "35 3 * * *"
 
-  workflow_dispatch:
-
   # 允许在 GitHub Actions 页面手动点击运行
   workflow_dispatch:
 
