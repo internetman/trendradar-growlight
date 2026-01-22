@@ -1,28 +1,38 @@
-name: Check In
+# name: Check In (DISABLED)
 
-# ✅ 签到续期：运行此 workflow 可重置 7 天计时，保持 "Get Hot News" 正常运行
-# ✅ Renewal: Run this workflow to reset the 7-day timer and keep "Get Hot News" active
+# ─────────────────────────────────────────────────────────────
+# 🚫 本 workflow 已彻底停用
 #
-# 📌 操作方法 / How to use:
-#   1. 点击 "Run workflow" 按钮 / Click "Run workflow" button
-#   2. 每 7 天内至少运行一次 / Run at least once every 7 days
+# 原用途（已废弃）：
+# - 7 天签到续期
+# - 删除 workflow runs
+# - 控制 crawler.yml 是否 disable
+#
+# 当前状态：
+# ✅ crawler.yml 完全由 cron 控制
+# ✅ 不再需要任何手动签到
+# ✅ 不再自动 disable / delete
+#
+# 本文件仅作为“历史占位文件”保留
+# 如果未来 100% 确认不再需要，可直接删除
+# ─────────────────────────────────────────────────────────────
 
-on:
-  workflow_dispatch:
+# on:
+#   workflow_dispatch:
 
-jobs:
-  del_runs:
-    runs-on: ubuntu-latest
-    permissions:
-      actions: write
-      contents: read
-    steps:
-      - name: Delete all workflow runs
-        uses: Mattraks/delete-workflow-runs@v2
-        with:
-          token: ${{ github.token }}
-          repository: ${{ github.repository }}
-          retain_days: 0
-          keep_minimum_runs: 0
-          delete_workflow_by_state_pattern: "ALL"
-          delete_run_by_conclusion_pattern: "ALL"
+# jobs:
+#   del_runs:
+#     runs-on: ubuntu-latest
+#     permissions:
+#       actions: write
+#       contents: read
+#     steps:
+#       - name: Delete all workflow runs
+#         uses: Mattraks/delete-workflow-runs@v2
+#         with:
+#           token: ${{ github.token }}
+#           repository: ${{ github.repository }}
+#           retain_days: 0
+#           keep_minimum_runs: 0
+#           delete_workflow_by_state_pattern: "ALL"
+#           delete_run_by_conclusion_pattern: "ALL"
