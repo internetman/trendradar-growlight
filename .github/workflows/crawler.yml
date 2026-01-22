@@ -28,14 +28,10 @@ on:
     #
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     #
-    # 📝 修改运行时间：只改第一个数字（0-59），表示每小时第几分钟运行
-    # 📝 Change time: Only modify the first number (0-59) = minute of each hour
-    #
-    # 示例 / Examples:
-    #   "15 * * * *"     → 每小时第15分钟 / minute 15 every hour
-    #   "30 0-14 * * *"  → 北京时间 8:00-22:00 每小时第30分钟 / Beijing 8am-10pm
-    #
-  - cron: "0 1 * * *"   # UTC 01:00 ≈ 北京时间 09:00（±30分钟）
+    # ✅ 稳定方案 / Stable Mode:
+    # - GitHub schedule 可能漂移/漏跑，所以用 “每10分钟触发一次” 来兜底
+    # - 但下面会有 Gate（闸门）控制：每天只在两个时间窗口真正执行（最多2次）
+    - cron: "*/10 * * * *"
 
   workflow_dispatch:
 
@@ -93,6 +89,55 @@ jobs:
             fi
           fi
 
+      - name: Gate - only run twice per day in target windows
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # 目标：北京时间 09:00 & 16:00
+          # 对应 UTC：01:00 & 08:00
+          # 给一个 ±20 分钟窗口（GitHub schedule 会漂移）
+          WINDOW_MINUTES=20
+          TARGET_UTC_HOURS=("01" "08")
+
+          NOW_UTC_HOUR=$(date -u +"%H")
+          NOW_UTC_MIN=$(date -u +"%M")
+          NOW_UTC_TOTAL=$((10#$NOW_UTC_HOUR*60 + 10#$NOW_UTC_MIN))
+
+          in_window=false
+          for h in "${TARGET_UTC_HOURS[@]}"; do
+            target_total=$((10#$h*60))
+            diff=$((NOW_UTC_TOTAL - target_total))
+            if [ $diff -lt 0 ]; then diff=$(( -diff )); fi
+            if [ $diff -le $WINDOW_MINUTES ]; then
+              in_window=true
+            fi
+          done
+
+          if [ "$in_window" != "true" ]; then
+            echo "⏭️ Not in time window. Skip."
+            exit 0
+          fi
+
+          # 当天最多成功跑2次（只统计 schedule 且 conclusion=success 的）
+          WORKFLOW_FILE="crawler.yml"
+          API_URL="repos/${{ github.repository }}/actions/workflows/$WORKFLOW_FILE/runs?per_page=100"
+          TODAY_UTC=$(date -u +"%Y-%m-%d")
+
+          COUNT=$(gh api "$API_URL" --jq \
+            '[.workflow_runs[]
+              | select(.event=="schedule")
+              | select(.conclusion=="success")
+              | select((.created_at | startswith("'"$TODAY_UTC"'")))
+            ] | length')
+
+          echo "✅ Successful scheduled runs today (UTC): $COUNT"
+          if [ "$COUNT" -ge 2 ]; then
+            echo "🛑 Already ran 2 times today. Skip."
+            exit 0
+          fi
+
+          echo "🚀 In window and under daily limit. Continue."
 
       # --------------------------------------------------------------------------------
       # 🚦 TRAFFIC CONTROL / 流量控制
