@@ -3,35 +3,14 @@ name: Get Hot News
 on:
   schedule:
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    # ⚠️ 试用版说明 / Trial Mode
+    # ✅ Stable & Simple Mode
+    # - 每天固定 2 次推送（最多2封）
+    # - GitHub Actions 使用 UTC
+    #   北京时间 09:00 = UTC 01:00
+    #   北京时间 16:00 = UTC 08:00
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    #
-    # 🔄 运行机制 / How it works:
-    #    - 每个周期为 7 天，届时自动停止
-    #    - 运行 "Check In" 会重置周期（重新开始 7 天倒计时，而非累加）
-    #    - Each cycle is 7 days, then auto-stops
-    #    - "Check In" resets the cycle (restarts 7-day countdown, not cumulative)
-    #
-    # 💡 设计初衷 / Why this design:
-    #    如果 7 天都忘了签到，或许这些资讯对你来说并非刚需
-    #    适时的暂停，能帮你从信息流中抽离，给大脑留出喘息的空间
-    #    If you forget for 7 days, maybe you don't really need it
-    #    A timely pause helps you detach from the stream and gives your mind space
-    #
-    # 🙏 珍惜资源 / Respect shared resources:
-    #    GitHub Actions 是平台提供的公共资源，每次运行都会消耗算力
-    #    签到机制确保资源分配给真正需要的用户，感谢你的理解与配合
-    #    GitHub Actions is a shared public resource provided by the platform
-    #    Check-in ensures resources go to those who truly need it — thank you
-    #
-    # 🚀 长期使用请部署 Docker 版本 / For long-term use, deploy Docker version
-    #
-    # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    #
-    # ✅ 稳定方案 / Stable Mode:
-    # - GitHub schedule 可能漂移/漏跑，所以用 “每10分钟触发一次” 来兜底
-    # - 但下面会有 Gate（闸门）控制：每天只在两个时间窗口真正执行（最多2次）
     - cron: "0 1 * * *"
+    - cron: "0 8 * * *"
 
   workflow_dispatch:
 
@@ -91,64 +70,9 @@ jobs:
       #       fi
       #     fi
 
-      - name: Gate - only run twice per day in target windows
-        if: success()
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          # 目标：北京时间 09:00 & 16:00
-          # 对应 UTC：01:00 & 08:00
-          # 给一个 ±20 分钟窗口（GitHub schedule 会漂移）
-          WINDOW_MINUTES=20
-          TARGET_UTC_HOURS=("01" "08")
-
-          NOW_UTC_HOUR=$(date -u +"%H")
-          NOW_UTC_MIN=$(date -u +"%M")
-          NOW_UTC_TOTAL=$((10#$NOW_UTC_HOUR*60 + 10#$NOW_UTC_MIN))
-
-          in_window=false
-          for h in "${TARGET_UTC_HOURS[@]}"; do
-            target_total=$((10#$h*60))
-            diff=$((NOW_UTC_TOTAL - target_total))
-            if [ $diff -lt 0 ]; then diff=$(( -diff )); fi
-            if [ $diff -le $WINDOW_MINUTES ]; then
-              in_window=true
-            fi
-          done
-
-          if [ "$in_window" != "true" ]; then
-            echo "⏭️ Not in time window. Skip."
-            exit 0
-          fi
-
-          # 当天最多成功跑2次（只统计 schedule 且 conclusion=success 的）
-          WORKFLOW_FILE="crawler.yml"
-          API_URL="repos/${{ github.repository }}/actions/workflows/$WORKFLOW_FILE/runs?per_page=100"
-          TODAY_UTC=$(date -u +"%Y-%m-%d")
-
-          COUNT=$(gh api "$API_URL" --jq \
-            '[.workflow_runs[]
-              | select(.event=="schedule")
-              | select(.conclusion=="success")
-              | select((.created_at | startswith("'"$TODAY_UTC"'")))
-            ] | length')
-
-          echo "✅ Successful scheduled runs today (UTC): $COUNT"
-          if [ "$COUNT" -ge 2 ]; then
-            echo "🛑 Already ran 2 times today. Skip."
-            exit 0
-          fi
-
-          echo "🚀 In window and under daily limit. Continue."
-
       # --------------------------------------------------------------------------------
       # 🚦 TRAFFIC CONTROL / 流量控制
       # --------------------------------------------------------------------------------
-      # EN: Generates a random delay between 1 and 300 seconds (5 minutes).
-      #     Critical for load balancing.
-      #
-      # CN: 生成 1 到 300 秒（5分钟）之间的随机延迟。
-      #     这对负载均衡至关重要。
       # - name: Random Delay (Traffic Control)
       #   if: success()
       #   run: |
